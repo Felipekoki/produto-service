@@ -8,6 +8,8 @@
 # Em seguida, execute o contêiner usando:
 #
 # docker run -i --rm -p 8081:8081 springboot/produto-service
+# docker run --name produto-service -e "OTLP_METRICS_EXPORT_URL=http://otel-collector::4318/v1/metrics" -e "OTLP_TRACING_ENDPOINT=http://otel-collector::4318/v1/traces" -i --rm -p 8081:8081 springboot/produto-service
+
 ####
 
 # Estágio de construção
