@@ -14,13 +14,17 @@ import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.semconv.resource.attributes.ResourceAttributes;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
 @Configuration
 public class OpenTelemetryConfig {
+
+    @Value("${grpc.log.record.export.endpoint}")
+    private String logExportEndpoint;
+
     @Bean
     OpenTelemetry openTelemetry(SdkLoggerProvider sdkLoggerProvider, SdkTracerProvider sdkTracerProvider, ContextPropagators contextPropagators) {
         OpenTelemetrySdk openTelemetrySdk = OpenTelemetrySdk.builder()
@@ -47,7 +51,7 @@ public class OpenTelemetryConfig {
         return BatchLogRecordProcessor
                 .builder(
                         OtlpGrpcLogRecordExporter.builder()
-                                .setEndpoint("http://localhost:4317")
+                                .setEndpoint(logExportEndpoint)
                                 .build())
                 .build();
     }
